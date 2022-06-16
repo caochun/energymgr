@@ -1,0 +1,49 @@
+@startuml
+
+class Thing
+
+class Attribute{
+    String name
+    Object value
+}
+
+class Telemetry{
+    String name
+    URI measurements
+}
+
+class Consumption{
+    String name
+    CType type
+}
+
+class Policy{
+    TSS timespan
+    Formula formula
+}
+
+class Measurement{
+    TS timestamp
+    KV[] measurements
+}
+
+enum CType{
+    ELE
+    WAT
+    GAS
+}
+
+
+Thing "1" *-- "*" Attribute : > has
+
+Thing "1" *-- "*" Telemetry : > collects
+
+Thing "1" *-- "*" Consumption : > is billed by
+
+Telemetry "1" -- "*" Measurement : > corresponds
+
+Consumption "1" -- "*" Policy : > contains a serie of 
+
+Policy "1" -- "*" Telemetry : > caculates on
+
+@enduml
