@@ -23,9 +23,12 @@ class Policy{
 }
 
 class Measurement{
+    String name
     TS timestamp
     KV[] measurements
 }
+
+note left: https://s3.amazonaws.com/\nnoaa.water-database/\nNOAA_data.txt
 
 enum CType{
     ELE
@@ -40,7 +43,7 @@ Thing "1" *-- "*" Telemetry : > collects
 
 Thing "1" *-- "*" Consumption : > is billed by
 
-Telemetry "1" -- "*" Measurement : > corresponds
+Telemetry "1" -- "*" Measurement : > refers to
 
 Consumption "1" -- "*" Policy : > contains a serie of 
 
