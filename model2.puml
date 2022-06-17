@@ -1,52 +1,63 @@
 @startuml
 
-class Thing
+实体 <|-- 空间
+实体 <|-- 设备
 
-class Attribute{
+空间 "1" *-- "0..1" 空间 : > 包含
+空间 "1" o-- "0..n" 设备 : < 部署于
+
+
+设备 <|-- 受管设备
+
+受管设备 <|-- 计量表
+受管设备 <|-- 网关
+
+
+受管设备 <|-- 能耗设备
+能耗设备 <|-- 组合设备
+
+
+组合设备 "0..1" o-- "1..n" 能耗设备 : > 包含
+
+class 属性{
     String name
     Object value
 }
 
-class Telemetry{
+class 度量{
     String name
     URI measurements
 }
 
-class Consumption{
+class 耗{
     String name
-    CType type
-}
-
-class Policy{
     TSS timespan
     Formula formula
 }
 
-class Measurement{
+
+class 度量值{
     String name
     TS timestamp
     KV[] measurements
 }
 
-note left: https://s3.amazonaws.com/\nnoaa.water-database/\nNOAA_data.txt
+实体 "1" *-- "*" 属性 : > 包含
 
-enum CType{
-    ELE
-    WAT
-    GAS
-}
+计量表 "1" *-- 计量点位 : > 包含
 
+度量 "1" -- "1" 计量点位 : < 对应
 
-Thing "1" *-- "*" Attribute : > has
+受管设备 "1" *-- "*" 度量 : > collects
 
-Thing "1" *-- "*" Telemetry : > collects
+能耗设备 "1" *-- "*" 耗 : > is billed by
 
-Thing "1" *-- "*" Consumption : > is billed by
+度量 "1" -- "*" 度量值 : > refers to
 
-Telemetry "1" -- "*" Measurement : > refers to
+耗 "1" -- "*" 度量 : > caculates on
 
-Consumption "1" -- "*" Policy : > contains a serie of 
+网关 "1" -- "*" 计量点位
 
-Policy "1" -- "*" Telemetry : > caculates on
+网关 -- 度量值
 
 @enduml
