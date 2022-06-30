@@ -1,0 +1,71 @@
+interface entity{
+    id: ID!
+    attributes: [attribute]
+}
+
+type attribute{
+    name: String
+    type: String
+}
+
+type space implements entity{
+    id: ID!
+    attributes: [attribute]
+    location: String
+}
+
+interface device implements entity{
+    id: ID!
+    attributes: [attribute]
+    name: String!
+    parent: device
+}
+
+type cost{
+    name: String!
+    begin: String
+    end: String
+    formula: String
+}
+
+type managed_device implements device & entity{
+    id: ID!
+    attributes: [attribute]
+    name: String!
+    parent: device
+    cost: [cost]!
+}
+
+type gateway implements device & entity{
+    id: ID!
+    attributes: [attribute]
+    name: String!
+    parent: device
+    controllers: [controller]
+    meters: [meter]
+}
+
+type telemetry{
+    id: ID!
+}
+
+type meter implements device & entity{
+    id: ID!
+    attributes: [attribute]
+    name: String!
+    parent: device
+    telemetries: [telemetry]
+}
+
+type command{
+    id: ID!
+}
+
+type controller implements device & entity{
+    id: ID!
+    attributes: [attribute]
+    name: String!
+    parent: device
+    controls: [command]
+}
+
